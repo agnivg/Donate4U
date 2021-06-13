@@ -13,7 +13,7 @@ export class NodeMailer {
 
     static sendEmail(data: { to: string[] , subject: string, html: string}): Promise<any> {
         return NodeMailer.initializeTransport().sendMail({
-            from: 'jaydipdey2807@gmail.com',
+            from: 'charity4utoday@gmail.com',
             to: data.to,
             subject: data.subject,
             html: data.html
