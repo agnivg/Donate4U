@@ -6,7 +6,7 @@ export class NodeMailer {
         return nodeMailer.createTransport(SendGrid({
             service: 'SendGrid',
             auth: {
-                api_key: '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'
+                api_key: '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'
             }
         }));
     }
