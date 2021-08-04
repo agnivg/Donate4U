@@ -32,11 +32,13 @@ export class UserController {
             let user = await new User(data).save(); //updates donor's schema
 
             //res.send(user);
+            
             await NodeMailer.sendEmail({             //sends verification email
                 to: [email] , subject: 'Email Verification',
                 html: `<h1>${verificationToken}</h1>`     //the token is sent to mail
 
-            })
+            });
+            
             req.email=req.body.email;
             next();
         } catch (e) {
@@ -134,7 +136,6 @@ export class UserController {
         try {
             const user: any = await User.findOneAndUpdate({email: email}, {
                 verification_token: verificationToken,
-                //verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
             });
             if (user) {
                 await NodeMailer.sendEmail({
@@ -157,7 +158,6 @@ export class UserController {
         try {
             const user: any = await Org.findOneAndUpdate({email: email}, {
                 verification_token: verificationToken,
-                //verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
             });
             if (user) {
                 await NodeMailer.sendEmail({
@@ -187,7 +187,6 @@ static async login(req, res, next) {
             const token = Jwt.sign({email: user.email, user_id: user._id},
                 getEnvironmentVariables().jwt_secret, {expiresIn: '30d'});
             res.cookie('jwt',token,{httpOnly:true});
-            const data = {token: token, user: user};
             const orgs=await Org.find({we_check:true});
             res.render('org',{orgs:orgs,name:user.username});
         }
@@ -269,7 +268,7 @@ static async login(req, res, next) {
             res.redirect("/");
         }
         catch(err){
-            throw err;
+            res.send(err)
         }
     }
     static async logoutOrg(req,res){
@@ -300,7 +299,7 @@ static async login(req, res, next) {
             const obid=req.params.obid;
             const user=await User.findById(id);
             let org=await Org.findById(orgid);
-            const don=await org["donation"].id(obid)
+            const don=await org["donation"].id(obid);
             //res.render('back');
             const donor = await User.findById(don.userID);
             const email_donor = donor["email"];
@@ -374,12 +373,6 @@ static async login(req, res, next) {
             let id = req.userId;
             const org = await Org.findById(id);
             if(org){
-                for(let li of org['link']){
-                    if(req.body.link==li){
-                        res.redirect('/');
-                        return;
-                    }
-                }
                 let arr = req.body.link.split('src="');
                 let str="";
                 let temp = arr[1];
@@ -387,15 +380,12 @@ static async login(req, res, next) {
                     str=str+temp[i];
                 }
                 str=str+'$'+req.body.description; 
-                /*const orgs = await Org.findOneAndUpdate({_id:id},{
-
-                    $push:
-                    {
-                            link :{
-                                 name: str ,
-                            }
+                for(let li of org['link']){
+                    if(str===li){
+                        res.redirect('/');
+                        return;
                     }
-                    })*/
+                }
                 org['link'].push(str);
                 const donations = org["donations"];
                 const name = org["username"];

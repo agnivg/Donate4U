@@ -48,7 +48,6 @@ static async getoneorg(req,res) {
                         else {
                                 req.userId = decodedToken.user_id;
                                 req.usermail = decodedToken.email       // Add to req object
-                                console.log(req.userId)
                                 next();
                         }
                 });
@@ -78,8 +77,7 @@ static async getoneorg(req,res) {
                 let orgId = req.params.id
                 let userid =req.userId
 
-                const targetorg = await Org.findById(orgId)
-                const uu= targetorg
+                const targetorg = await Org.findById(orgId);
                 const  on= targetorg["username"]
                 const email = targetorg["email"]
 
@@ -88,13 +86,13 @@ static async getoneorg(req,res) {
                 const email2 = targetUser["email"]
                 const donorDonating = await User.findOneAndUpdate({_id:userid},{
 
-                $push:
-                {
-                        description :{
-                             name: on ,
-                             describe :   req.body.description
+                        $push:
+                        {
+                                description :{
+                                name: on ,
+                                describe :   req.body.description
+                                }
                         }
-                }
                 })
                 try{
                         const targetuser = await User.findById(userid)
@@ -106,19 +104,19 @@ static async getoneorg(req,res) {
                         const user = await Org.findOneAndUpdate({_id: orgId}, {
                                 $push: {
 
-                        donation:{
-                                name: u,
-                                phone: p,
-                                address: a,
-                                userID: userid,
-                                description: req.body.description
-                        }
+                                        donation:{
+                                                name: u,
+                                                phone: p,
+                                                address: a,
+                                                userID: userid,
+                                                description: req.body.description
+                                        }
                                 }
                          },
-                {new: true});
+                        {new: true});
                          NodeMailer.sendEmail({
                                 to: [email] , subject: 'Donation received!',
-                                html: `<h1> You have received a donation request from ${email2}</h1>`
+                                html: `<h1> You have received a donation request from ${u} with Email: ${email2}</h1>`
                         })
                          res.render('payment');
                 }catch (e){
@@ -164,32 +162,32 @@ static async getoneorg(req,res) {
            }
        }
        static async reDirect(req,res,next){
-        if(req.cookies.jwt){
-                var ID;
-                const token=req.cookies.jwt;
-                Jwt.verify(token, getEnvironmentVariables().jwt_secret, function(err, decodedToken) {
-                    if(err) {  next(err) }
-                    else {
-                        ID = decodedToken.user_id;
-                    }
-                });
-                let userid = ID;
-                const user = await User.findById(userid)
-                const org = await Org.findById(userid);
-                if(!user&&!org){
-                    res.send("<h1>You are not authorized.</h1>");
-                }
-                else if(user){
-                    res.redirect('/api/org/all');
-                }
-                else if(org){
-                    res.render("orgHome",{name:org["username"],donations:org["donation"],id:org["_id"]})
+                if(req.cookies.jwt){
+                        var ID;
+                        const token=req.cookies.jwt;
+                        Jwt.verify(token, getEnvironmentVariables().jwt_secret, function(err, decodedToken) {
+                        if(err) {  next(err) }
+                        else {
+                                ID = decodedToken.user_id;
+                        }
+                        });
+                        let userid = ID;
+                        const user = await User.findById(userid);
+                        const org = await Org.findById(userid);
+                        if(!user&&!org){
+                        res.send("<h1>You are not authorized.</h1>");
+                        }
+                        else if(user){
+                        res.redirect('/api/org/all');
+                        }
+                        else if(org){
+                        res.render("orgHome",{name:org["username"],donations:org["donation"],id:org["_id"]})
+                        }else{
+                        res.render("home");
+                        }
                 }else{
-                    res.render("home");
+                        res.render("home");
                 }
-        }else{
-                res.render("home");
-        }
        }
        static async verifyorganization(req,res){
                try{

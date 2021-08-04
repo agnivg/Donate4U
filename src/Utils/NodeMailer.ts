@@ -3,12 +3,13 @@ import * as SendGrid from 'nodemailer-sendgrid-transport';
 
 export class NodeMailer {
     private static initializeTransport() {
-        return nodeMailer.createTransport(SendGrid({
-            service: 'SendGrid',
+        return nodeMailer.createTransport({
+            service: 'gmail',
             auth: {
-                api_key: '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'
+                user:'charity4utoday@gmail.com',
+                pass:'charity@123'
             }
-        }));
+        });
     }
 
     static sendEmail(data: { to: string[] , subject: string, html: string}): Promise<any> {
