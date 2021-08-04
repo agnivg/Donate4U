@@ -35,7 +35,7 @@ export class Server {
     }
 
     connectMongoDb() {
-        const databaseUrl = "mongodb+srv://admin:admin123@cluster0.yk9sl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+        const databaseUrl = "mongodb://localhost:27017/Charity";
         mongoose.connect(databaseUrl, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false}).then(() => {
             console.log('connected to database');
         });
