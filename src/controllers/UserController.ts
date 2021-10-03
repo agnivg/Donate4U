@@ -349,8 +349,8 @@ static async login(req, res, next) {
         const ORG = await Org.findOneAndUpdate({_id: orgid}, {
             $pull: {
             donation:{
-                id:id,
-                _id:obid
+                userID: id,
+                _id: obid
             }
         }
      },
