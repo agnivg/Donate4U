@@ -34,9 +34,9 @@ export class Server {
         this.app.set('views',(path.join(__dirname, 'views')));
     }
 
-    connectMongoDb() {
-        const databaseUrl = "mongodb+srv://adminuser:useradmin@charitydb.fivwx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-        mongoose.connect(process.env.MONGODB_URI || databaseUrl, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false}).then(() => {
+    connectMongoDb() {    
+        const databaseUrl='mongodb://localhost:27017/CharityDb'
+        mongoose.connect(databaseUrl, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false}).then(() => {
             console.log('connected to database');
         });
     }
