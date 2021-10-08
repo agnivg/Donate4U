@@ -1,12 +1,10 @@
 import * as express from 'express';                          //All the imports and requirements
-import {getEnvironmentVariables} from './environment/env';   //
 import * as mongoose from 'mongoose';                        //
 import UserRouter from './routers/UserRouter';               //
 import bodyParser = require('body-parser');                  //
 import OrgRouter from "./routers/OrgRouter";                 //
 import ListRouter from "./routers/ListRouter";
 import {OrgController} from "./controllers/OrgController" ;             //
-import { getMaxListeners } from 'process';
 import {NodeMailer} from './Utils/NodeMailer';
 const path = require('path');  
 const cookieParser=require('cookie-parser');                              //  All the imports and requirements

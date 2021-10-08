@@ -1,5 +1,4 @@
 import * as nodeMailer from 'nodemailer';
-import * as SendGrid from 'nodemailer-sendgrid-transport';
 
 export class NodeMailer {
     private static initializeTransport() {
