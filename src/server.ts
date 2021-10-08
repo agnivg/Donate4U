@@ -1,12 +1,10 @@
 import * as express from 'express';                          //All the imports and requirements
-import {getEnvironmentVariables} from './environment/env';   //
 import * as mongoose from 'mongoose';                        //
 import UserRouter from './routers/UserRouter';               //
 import bodyParser = require('body-parser');                  //
 import OrgRouter from "./routers/OrgRouter";                 //
 import ListRouter from "./routers/ListRouter";
 import {OrgController} from "./controllers/OrgController" ;             //
-import { getMaxListeners } from 'process';
 import {NodeMailer} from './Utils/NodeMailer';
 const path = require('path');  
 const cookieParser=require('cookie-parser');                              //  All the imports and requirements
@@ -34,8 +32,8 @@ export class Server {
         this.app.set('views',(path.join(__dirname, 'views')));
     }
 
-    connectMongoDb() {
-        const databaseUrl = "mongodb+srv://adminuser:useradmin@charitydb.fivwx.mongodb.net/CharityDb?retryWrites=true&w=majority";
+    connectMongoDb() {    
+        const databaseUrl='mongodb://localhost:27017/CharityDb'
         mongoose.connect(databaseUrl, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false}).then(() => {
             console.log('connected to database');
         });
