@@ -60,7 +60,6 @@ static async checkwhetherDonor(req,res,next){
             else {
                 req.userId = decodedToken.user_id;
                 req.usermail = decodedToken.email       // Add to req object
-                console.log(req.userId)
             }
         });
         let userid =req.userId
